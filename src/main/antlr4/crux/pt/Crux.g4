@@ -1,15 +1,15 @@
 grammar Crux;
 literal : Integer | TRUE | FALSE ;
-designator : Identifier '[' expr0 ']' ;
+designator : Identifier ('[' expr0 ']')? ;
 type : Identifier ;
 
 
-op0 : '>=' | '<=' | '!=' | '==' | '>' | '<' ;
-op1 : '+' | '-' | '||' ;
-op2 : '*' | '/' | '&&' ;
+op0 : GREATER_EQUAL | LESSER_EQUAL | NOT_EQUAL | EQUAL | GREATER_THAN | LESS_THAN ;
+op1 : ADD | SUB | OR ;
+op2 : MUL | DIV | AND ;
 
 
-expr0 : expr1 [ op0 expr1 ] ;
+expr0 : expr1 (op0 expr1)?  ;
 expr1 : expr2 | expr1 op1 expr2 ;
 expr2 : expr3 | expr2 op2 expr3 ;
 expr3 : '!' expr3
@@ -18,23 +18,23 @@ expr3 : '!' expr3
  | callExpr
  | literal ;
 callExpr : Identifier '(' exprList ')' ;
-exprList : expr0 [',' expr0]* | ;
+exprList :  expr0 (',' expr0)*  ;
 
 
-paramList : param [',' param]* | ;
+paramList : param (',' param)* | ;
 param : Identifier type ;
 
 
 varDecl : Var Identifier type ';' ;
 arrayDecl : Var Identifier '[' Integer ']' type ';' ;
-functionDefn : 'func' Identifier '(' paramList ')' [ type ] stmtBlock ';' ;
+functionDefn : 'func' Identifier '(' paramList ')'  (type)?  stmtBlock ;
 decl : varDecl | arrayDecl | functionDefn ;
 declList : decl* ;
 
 
 assignStmt : designator '=' expr0 ';' ;
 callStmt : callExpr ';' ;
-ifStmt : 'if' expr0 stmtBlock ['else' stmtBlock] ;
+ifStmt : 'if' expr0 stmtBlock ('else' stmtBlock)? ;
 loopStmt : 'loop' stmtBlock ;
 breakStmt : 'break' ';' ;
 continueStmt : 'continue' ';' ;
@@ -98,5 +98,5 @@ COMMA : ',' ;
 COLON : ':' ;
 SEMICOLON : ';' ;
 
-Identifier : [a-zA-Z][a-zA-Z0-9]* ;
+Identifier : [a-zA-Z][a-zA-Z0-9]* | VOID | BOOL | INT;
 ERROR : . ;
