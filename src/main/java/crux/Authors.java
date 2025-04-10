@@ -2,7 +2,7 @@ package crux;
 
 final class Authors {
   // TODO: Add author information.
-  static final Author[] all = {new Author("Eric Che", "76483202", "eche2@uci.edu"),};
+  static final Author[] all = {new Author("Eric Che", "76483202", "eche2@ics.uci.edu"),};
 }
 
 
