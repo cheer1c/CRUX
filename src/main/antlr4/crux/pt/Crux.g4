@@ -1,28 +1,53 @@
 grammar Crux;
-program
- : declList EOF
- ;
+literal : Integer | TRUE | FALSE ;
+designator : Identifier '[' expr0 ']' ;
+type : Identifier ;
 
-declList
- : decl*
- ;
 
-decl
- : varDecl
- ;
+op0 : '>=' | '<=' | '!=' | '==' | '>' | '<' ;
+op1 : '+' | '-' | '||' ;
+op2 : '*' | '/' | '&&' ;
 
-varDecl
- : Var Identifier type ';'
- ;
 
-type
- : Identifier
- ;
+expr0 : expr1 [ op0 expr1 ] ;
+expr1 : expr2 | expr1 op1 expr2 ;
+expr2 : expr3 | expr2 op2 expr3 ;
+expr3 : '!' expr3
+ | '(' expr0 ')'
+ | designator
+ | callExpr
+ | literal ;
+callExpr : Identifier '(' exprList ')' ;
+exprList : expr0 [',' expr0]* | ;
 
-literal
- : Integer
- | True
- | False
+
+paramList : param [',' param]* | ;
+param : Identifier type ;
+
+
+varDecl : Var Identifier type ';' ;
+arrayDecl : Var Identifier '[' Integer ']' type ';' ;
+functionDefn : 'func' Identifier '(' paramList ')' [ type ] stmtBlock ';' ;
+decl : varDecl | arrayDecl | functionDefn ;
+declList : decl* ;
+
+
+assignStmt : designator '=' expr0 ';' ;
+callStmt : callExpr ';' ;
+ifStmt : 'if' expr0 stmtBlock ['else' stmtBlock] ;
+loopStmt : 'loop' stmtBlock ;
+breakStmt : 'break' ';' ;
+continueStmt : 'continue' ';' ;
+returnStmt : 'return' expr0 ';' ;
+stmt : varDecl | callStmt | assignStmt | ifStmt | loopStmt | breakStmt | continueStmt | returnStmt  ;
+stmtList : stmt*  ;
+stmtBlock : '{' stmtList '}' ;
+
+program : declList EOF ;
+
+Integer
+ : '0'
+ | [1-9] [0-9]*
  ;
 
 Var: 'var';
@@ -73,13 +98,5 @@ COMMA : ',' ;
 COLON : ':' ;
 SEMICOLON : ';' ;
 
-Integer
- : '0'
- | [1-9] [0-9]*
- ;
-
-Identifier
- : [a-zA-Z] [a-zA-Z0-9_]*
- ;
-
+Identifier : [a-zA-Z][a-zA-Z0-9]* ;
 ERROR : . ;
