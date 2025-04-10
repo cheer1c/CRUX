@@ -43,3 +43,55 @@ WhiteSpaces
 Comment
  : '//' ~[\r\n]* -> skip
  ;
+
+AND
+ : '&&'
+ ;
+
+OR
+ : '||'
+ ;
+
+NOT
+ : '!' 
+ ;
+
+VAR
+ : 'var' 
+ ;
+
+FUNC
+ : 'func' 
+ ;
+
+IF
+ : 'if' 
+ ;
+
+ELSE
+ : 'else' 
+ ;
+
+LOOP
+ : 'loop' 
+ ;
+
+BREAK
+ : 'break' 
+ ;
+
+CONTINUE
+ : 'continue' 
+ ;
+
+TRUE
+ : 'true' 
+ ;
+
+FALSE
+ : 'false' 
+ ;
+
+RETURN
+ : 'return' 
+ ;
